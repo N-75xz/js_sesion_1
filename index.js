@@ -71,24 +71,26 @@ const users = [ //array de objetos
 console.table(users) //imprime una tabla con los objetos del array
 
 const bob = users[1].name //obtiene el nombre de la segunda persona del array ("juan")
+document.addEventListener("DOMContentLoaded", () =>{
+    const result = document.getElementById("result");
 
-const result = document.getElementById("result");
+    async function main() {
+        const response = await fetch("https://pokeapi.co/api/v2/pokemon/?limit=10000");
+        if (!response.ok) {
+            console.error("No se encuentra el pokemon");
+            return;
+        }
+        const data = await response.json();
 
-async function main() {
-    const response = await fetch("https://pokeapi.co/api/vs/pokemon");
-    if (!response.ok) {
-        console.error("No se encuentra el pokemon");
-        return;
+        console.log(data.results);
+
+        function printElement (element) {
+            const newDiv = document.createElement("div");
+            newDiv.innerHTML = "<a href='" + element.url + "'>" + element.name + "</a>";
+            result.appendChild(newDiv);
+        }
+        data.results.forEach(printElement);
     }
-    const data = await response.json();
+    main();
+});
 
-    console.log(data.results);
-
-    data.results.forEach(element => {
-        const newDiv = document.createElement("div");
-        newDiv.innnerHTML = "**" + element.name + "**";
-        result.appendChild(newDiv);
-    });
-}
-
-main();
